@@ -5,10 +5,13 @@ function Chat() {
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const messagesEndRef = useRef(null)
-
+    const name=localStorage.getItem("chatbotRoomName")
+    
     const fetchInitialMessages = async () => {
         try {
-            const response = await axios.get(`http://localhost:8070/api/v1/chat/ai`)
+            
+            console.log(name)
+            const response = await axios.get(`http://localhost:8070/api/v1/chat/ai/${name}`)
             if (response.data && response.data.length > 0) {
                 setMessages(response.data)
             }
@@ -41,7 +44,7 @@ function Chat() {
         setMessages((prev)=>[...prev, newChat])
         setNewMessage('')
 
-        await axios.post(`http://localhost:8070/api/v1/chat/ai`, {
+        await axios.post(`http://localhost:8070/api/v1/chat/ai/${name}`, {
             id:newChat.id,
             content: newMessage
         })

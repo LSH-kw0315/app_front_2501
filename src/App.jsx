@@ -6,8 +6,18 @@ import ChatRoomList from './pages/ChatRoomList'
 import ChatRoom from './pages/ChatRoom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import {v4 as uuid} from 'uuid'
+import { useEffect } from 'react'
 
 function App() {
+
+    useEffect(()=>{
+        if(!localStorage.getItem("chatbotRoomName")){
+            const newId=uuid();
+            localStorage.setItem("chatbotRoomName",newId);
+        }
+    },[])
+    
     return (
         <Layout>
             <Routes>
