@@ -12,9 +12,9 @@ import { useEffect } from 'react'
 function App() {
 
     useEffect(()=>{
-        if(!localStorage.getItem("chatbotRoomName")){
+        if(!sessionStorage.getItem("clientUUID")){
             const newId=uuid();
-            localStorage.setItem("chatbotRoomName",newId);
+            sessionStorage.setItem("clientUUID",newId);
         }
     },[])
     

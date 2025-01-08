@@ -16,6 +16,8 @@ function ChatRoom() {
     const messagesEndRef = useRef(null)
     const wsRef = useRef(null)
     const authorNameRef = useRef(authorName);
+    const clientUUID=sessionStorage.getItem("clientUUID")
+    const lastMessage=useRef(null)
 
     useEffect(() => {
         authorNameRef.current = authorName;
@@ -75,7 +77,11 @@ function ChatRoom() {
 
     const updateMessageForOtherElse=(message)=>{
         const msg=JSON.parse(message.body);
-        if(authorNameRef.current!==msg.author){
+        console.log("메시지:");
+        console.log(msg);
+        console.log("마지막 메시지:");
+        console.log(lastMessage.current);
+        if(lastMessage.current.client!==msg.client){
             setMessages((prev)=>[...prev,msg]);
         }
     }
@@ -96,7 +102,8 @@ function ChatRoom() {
 
     // 새 메시지 수신 시 스크롤
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        lastMessage.current=messages[messages.length-1]
     }, [messages])
 
     const handleSubmit = async (e) => {
@@ -109,6 +116,7 @@ function ChatRoom() {
             author: authorName,
             createdAt: new Date().toISOString(),
             isMyMessage: true,
+            client:clientUUID
         }
 
         try {
@@ -119,6 +127,7 @@ function ChatRoom() {
                     JSON.stringify({
                         content: newMessage,
                         author: authorName,
+                        client: clientUUID
                     }),
                 )
             } else {
@@ -172,7 +181,7 @@ function ChatRoom() {
                                 </span>
                                 <div
                                     className={`max-w-[70%] ${
-                                        message.isMyMessage
+                                        message.client === clientUUID
                                             ? 'bg-indigo-500 text-white rounded-l-lg rounded-tr-lg'
                                             : 'bg-white text-gray-800 rounded-r-lg rounded-tl-lg'
                                     } p-3 shadow-md`}
