@@ -81,7 +81,7 @@ function ChatRoom() {
         console.log(msg);
         console.log("마지막 메시지:");
         console.log(lastMessage.current);
-        if(lastMessage.current.client!==msg.client){
+        if(lastMessage.current?.client!==msg.client){
             setMessages((prev)=>[...prev,msg]);
         }
     }
